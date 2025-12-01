@@ -9,24 +9,31 @@ class TransactionsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ...transactions.map((trans) {
+    return Container(
+      height: 400,
+      padding: EdgeInsets.only(top: 10),
+      child: ListView.builder(
+        // reverse: true,
+        itemCount: transactions.length,
+        itemBuilder: (context, ind) {
           return Card(
             child: Row(
               children: [
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.purple, width: 2),
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 2,
+                    ),
                   ),
                   padding: EdgeInsets.all(10),
                   child: Text(
-                    "₹${trans.amount}",
+                    "₹${transactions[ind].amount.toStringAsFixed(2)}",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.purple,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
@@ -34,14 +41,14 @@ class TransactionsList extends StatelessWidget {
                   crossAxisAlignment: .start,
                   children: [
                     Text(
-                      trans.title,
+                      transactions[ind].title,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      DateFormat.yMMMEd().format(trans.date),
+                      DateFormat.yMMMEd().format(transactions[ind].date),
                       style: TextStyle(color: Colors.grey),
                     ),
                   ],
@@ -49,8 +56,8 @@ class TransactionsList extends StatelessWidget {
               ],
             ),
           );
-        }),
-      ],
+        },
+      ),
     );
   }
 }

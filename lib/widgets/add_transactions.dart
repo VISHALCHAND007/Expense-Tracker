@@ -1,12 +1,30 @@
-import '../models/transaction.dart';
 import 'package:flutter/material.dart';
 
-class AddTransactions extends StatelessWidget {
-  final List<Transaction> transactions;
-  AddTransactions(this.transactions, {super.key});
+class AddTransactions extends StatefulWidget {
+  final Function(String, double) addTransaction;
 
+  AddTransactions({required this.addTransaction, super.key});
+
+  @override
+  State<AddTransactions> createState() => _AddTransactionsState();
+}
+
+class _AddTransactionsState extends State<AddTransactions> {
   final titleController = TextEditingController();
+
   final amountController = TextEditingController();
+
+  void _submitTransaction() {
+    final enteredTitle = titleController.text;
+    final enteredAmount = amountController.text;
+
+    if (enteredTitle.isEmpty || enteredAmount.isEmpty) return;
+
+    final parsedAmount = double.parse(amountController.text);
+    widget.addTransaction(enteredTitle, parsedAmount);
+    //closing bottom sheet
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,20 +37,19 @@ class AddTransactions extends StatelessWidget {
             TextField(
               decoration: InputDecoration(label: Text("Title")),
               controller: titleController,
+              onSubmitted: (_) => _submitTransaction(),
             ),
             TextField(
               decoration: InputDecoration(label: Text("Amount")),
               controller: amountController,
               keyboardType: TextInputType.numberWithOptions(),
+              onSubmitted: (_) => _submitTransaction(),
             ),
             TextButton(
-              onPressed: () {
-                print(titleController.text);
-                print(amountController.text);
-              },
+              onPressed: _submitTransaction,
               child: Text(
                 "Add Transaction",
-                style: TextStyle(color: Colors.deepPurple),
+                style: TextStyle(color: Theme.of(context).primaryColor),
               ),
             ),
           ],
