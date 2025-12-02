@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AddTransactions extends StatefulWidget {
-  final Function(String, double) addTransaction;
+  final Function(String, double, DateTime) addTransaction;
 
-  AddTransactions({required this.addTransaction, super.key});
+  const AddTransactions({required this.addTransaction, super.key});
 
   @override
   State<AddTransactions> createState() => _AddTransactionsState();
@@ -13,17 +14,37 @@ class _AddTransactionsState extends State<AddTransactions> {
   final titleController = TextEditingController();
 
   final amountController = TextEditingController();
+  final dateController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
 
   void _submitTransaction() {
     final enteredTitle = titleController.text;
     final enteredAmount = amountController.text;
+    final enteredDate = dateController.text;
 
-    if (enteredTitle.isEmpty || enteredAmount.isEmpty) return;
+    if (enteredTitle.isEmpty || enteredAmount.isEmpty || enteredDate.isEmpty) {
+      return;
+    }
 
     final parsedAmount = double.parse(amountController.text);
-    widget.addTransaction(enteredTitle, parsedAmount);
+    widget.addTransaction(enteredTitle, parsedAmount, selectedDate);
     //closing bottom sheet
     Navigator.of(context).pop();
+  }
+
+  void _showDatePickerModal() {
+    showDatePicker(
+      context: context,
+      firstDate: DateTime(2024),
+      lastDate: DateTime.now(),
+      initialDate: DateTime.now(),
+    ).then((selectedDate) {
+      if (selectedDate != null) {
+        this.selectedDate = selectedDate;
+        final formattedDate = DateFormat.yMMMEd().format(selectedDate);
+        dateController.text = formattedDate;
+      }
+    });
   }
 
   @override
@@ -33,6 +54,7 @@ class _AddTransactionsState extends State<AddTransactions> {
         padding: EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: .end,
+          spacing: 20.0,
           children: [
             TextField(
               decoration: InputDecoration(label: Text("Title")),
@@ -45,12 +67,26 @@ class _AddTransactionsState extends State<AddTransactions> {
               keyboardType: TextInputType.numberWithOptions(),
               onSubmitted: (_) => _submitTransaction(),
             ),
-            TextButton(
-              onPressed: _submitTransaction,
-              child: Text(
-                "Add Transaction",
-                style: TextStyle(color: Theme.of(context).primaryColor),
+            InkWell(
+              onTap: () {
+                _showDatePickerModal();
+              },
+              child: IgnorePointer(
+                child: TextField(
+                  readOnly: true,
+                  controller: dateController,
+                  decoration: InputDecoration(
+                    label: Text("Select date"),
+                    hint: Text("No date chosen!"),
+                    icon: Icon(Icons.calendar_month_outlined),
+                  ),
+                ),
               ),
+            ),
+
+            FilledButton(
+              onPressed: _submitTransaction,
+              child: Text("Add Transaction"),
             ),
           ],
         ),
