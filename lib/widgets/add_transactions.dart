@@ -1,3 +1,4 @@
+import './bottom_sheet_head.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -56,6 +57,7 @@ class _AddTransactionsState extends State<AddTransactions> {
           crossAxisAlignment: .end,
           spacing: 20.0,
           children: [
+            BottomSheetHead(),
             TextField(
               decoration: InputDecoration(label: Text("Title")),
               controller: titleController,
@@ -86,7 +88,7 @@ class _AddTransactionsState extends State<AddTransactions> {
 
             FilledButton(
               onPressed: _submitTransaction,
-              child: Text("Add Transaction"),
+              child: Text("Add Transaction", style: TextStyle(fontSize: 15)),
             ),
           ],
         ),
