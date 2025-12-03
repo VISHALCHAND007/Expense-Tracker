@@ -16,7 +16,7 @@ class TransactionsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400,
+      // height: 400,
       padding: EdgeInsets.only(top: 10),
       child: transactions.isEmpty
           ? NoTransactions()
@@ -47,13 +47,26 @@ class TransactionsList extends StatelessWidget {
                     subtitle: Text(
                       DateFormat.yMMMEd().format(transactions[ind].date),
                     ),
-                    trailing: IconButton(
-                      onPressed: () => deleteTransaction(transactions[ind].id),
-                      icon: Icon(
-                        Icons.delete,
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                    ),
+                    trailing: MediaQuery.of(context).size.width > 460
+                        ? TextButton.icon(
+                            onPressed: () =>
+                                deleteTransaction(transactions[ind].id),
+                            label: Text("Delete"),
+                            icon: Icon(Icons.delete),
+                            style: TextButton.styleFrom(
+                              foregroundColor: Theme.of(
+                                context,
+                              ).colorScheme.error,
+                            ),
+                          )
+                        : IconButton(
+                            onPressed: () =>
+                                deleteTransaction(transactions[ind].id),
+                            icon: Icon(
+                              Icons.delete,
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
                   ),
                 );
                 // Card(

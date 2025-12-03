@@ -1,11 +1,18 @@
 import 'package:expense_tracker/widgets/charts.dart';
 import 'package:expense_tracker/widgets/transactions_list.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 import './widgets/add_transactions.dart';
 import 'package:flutter/material.dart';
 import './models/transaction.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -65,6 +72,7 @@ class _MyHomePageState extends State<_MyHomePage> {
       date: DateTime.now().subtract(Duration(days: 2)),
     ),
   ];
+  bool _showCharts = false;
 
   void _addNewTransaction(String title, double amount, DateTime date) {
     var newTransaction = Transaction(
@@ -102,27 +110,71 @@ class _MyHomePageState extends State<_MyHomePage> {
     }).toList();
   }
 
+  late final appBar = AppBar(
+    actions: [
+      IconButton(
+        icon: Icon(Icons.add),
+        onPressed: () => _startAddTransactionsBottomSheet(context),
+      ),
+    ],
+    title: Text("Expense Tracker"),
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _startAddTransactionsBottomSheet(context),
-          ),
-        ],
-        title: Text("Expense Tracker"),
+    final actualBodyHeight =
+        MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top; // statusbar height
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+    final txListWidget = SizedBox(
+      height: actualBodyHeight * .7,
+      child: TransactionsList(
+        _transactions,
+        deleteTransaction: _deleteTransaction,
       ),
+    );
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           crossAxisAlignment: .stretch,
           children: [
-            Charts(recentTransactions: _recentTransactions),
-            TransactionsList(
-              _transactions,
-              deleteTransaction: _deleteTransaction,
-            ),
+            if (isLandscape)
+              Row(
+                mainAxisAlignment: .spaceBetween,
+                children: [
+                  Text(
+                    "Show chart:",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Switch(
+                    value: _showCharts,
+                    onChanged: (val) {
+                      setState(() {
+                        _showCharts = val;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            if (isLandscape)
+              _showCharts
+                  ? SizedBox(
+                      height: actualBodyHeight * .7,
+                      child: Charts(recentTransactions: _recentTransactions),
+                    )
+                  : txListWidget,
+
+            //portrait mode
+            if (!isLandscape)
+              SizedBox(
+                height: actualBodyHeight * .3,
+                child: Charts(recentTransactions: _recentTransactions),
+              ),
+            if (!isLandscape) txListWidget,
           ],
         ),
       ),

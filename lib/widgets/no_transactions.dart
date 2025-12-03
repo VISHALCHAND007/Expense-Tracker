@@ -5,21 +5,25 @@ class NoTransactions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          "No transactions are added yet!",
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        SizedBox(height: 20),
-        SizedBox(
-          height: 200,
-          child: Image.asset(
-            "assets/images/no_transactions.png",
-            fit: BoxFit.cover,
-          ),
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (ctx, constraints) {
+        return Column(
+          children: [
+            Text(
+              "No transactions are added yet!",
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            SizedBox(height: 20),
+            SizedBox(
+              height: constraints.maxHeight * .6,
+              child: Image.asset(
+                "assets/images/no_transactions.png",
+                fit: BoxFit.cover,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

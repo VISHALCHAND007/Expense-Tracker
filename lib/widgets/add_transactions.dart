@@ -51,46 +51,53 @@ class _AddTransactionsState extends State<AddTransactions> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: .end,
-          spacing: 20.0,
-          children: [
-            BottomSheetHead(),
-            TextField(
-              decoration: InputDecoration(label: Text("Title")),
-              controller: titleController,
-              onSubmitted: (_) => _submitTransaction(),
-            ),
-            TextField(
-              decoration: InputDecoration(label: Text("Amount")),
-              controller: amountController,
-              keyboardType: TextInputType.numberWithOptions(),
-              onSubmitted: (_) => _submitTransaction(),
-            ),
-            InkWell(
-              onTap: () {
-                _showDatePickerModal();
-              },
-              child: IgnorePointer(
-                child: TextField(
-                  readOnly: true,
-                  controller: dateController,
-                  decoration: InputDecoration(
-                    label: Text("Select date"),
-                    hint: Text("No date chosen!"),
-                    icon: Icon(Icons.calendar_month_outlined),
+      child: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(
+            top: 10,
+            right: 10,
+            left: 10,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Column(
+            crossAxisAlignment: .end,
+            spacing: 20.0,
+            children: [
+              BottomSheetHead(),
+              TextField(
+                decoration: InputDecoration(label: Text("Title")),
+                controller: titleController,
+                onSubmitted: (_) => _submitTransaction(),
+              ),
+              TextField(
+                decoration: InputDecoration(label: Text("Amount")),
+                controller: amountController,
+                keyboardType: TextInputType.numberWithOptions(),
+                onSubmitted: (_) => _submitTransaction(),
+              ),
+              InkWell(
+                onTap: () {
+                  _showDatePickerModal();
+                },
+                child: IgnorePointer(
+                  child: TextField(
+                    readOnly: true,
+                    controller: dateController,
+                    decoration: InputDecoration(
+                      label: Text("Select date"),
+                      hint: Text("No date chosen!"),
+                      icon: Icon(Icons.calendar_month_outlined),
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            FilledButton(
-              onPressed: _submitTransaction,
-              child: Text("Add Transaction", style: TextStyle(fontSize: 15)),
-            ),
-          ],
+              FilledButton(
+                onPressed: _submitTransaction,
+                child: Text("Add Transaction", style: TextStyle(fontSize: 15)),
+              ),
+            ],
+          ),
         ),
       ),
     );

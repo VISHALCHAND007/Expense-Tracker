@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Horizontalspacer extends StatelessWidget {
-  const Horizontalspacer({super.key});
+  final double height;
+  const Horizontalspacer(this.height, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(height: 4);
+    return SizedBox(height: height);
   }
 }
