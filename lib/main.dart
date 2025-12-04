@@ -1,9 +1,10 @@
+import 'dart:io';
 import 'package:expense_tracker/widgets/charts.dart';
 import 'package:expense_tracker/widgets/transactions_list.dart';
 import 'package:flutter/services.dart';
-import './widgets/add_transactions.dart';
 import 'package:flutter/material.dart';
 import './models/transaction.dart';
+import './widgets/add_transactions.dart';
 
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -122,12 +123,12 @@ class _MyHomePageState extends State<_MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
     final actualBodyHeight =
-        MediaQuery.of(context).size.height -
+        mediaQuery.size.height -
         appBar.preferredSize.height -
-        MediaQuery.of(context).padding.top; // statusbar height
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+        mediaQuery.padding.top; // statusbar height
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
     final txListWidget = SizedBox(
       height: actualBodyHeight * .7,
       child: TransactionsList(
@@ -150,7 +151,7 @@ class _MyHomePageState extends State<_MyHomePage> {
                     "Show chart:",
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  Switch(
+                  Switch.adaptive(
                     value: _showCharts,
                     onChanged: (val) {
                       setState(() {
@@ -179,10 +180,12 @@ class _MyHomePageState extends State<_MyHomePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _startAddTransactionsBottomSheet(context),
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton: Platform.isIOS
+          ? Container()
+          : FloatingActionButton(
+              onPressed: () => _startAddTransactionsBottomSheet(context),
+              child: Icon(Icons.add),
+            ),
     );
   }
 }
