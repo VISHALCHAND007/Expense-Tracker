@@ -112,6 +112,41 @@ class _MyHomePageState extends State<_MyHomePage> {
     }).toList();
   }
 
+  List<Widget> _landscapeDesign(double actualBodyHeight, Widget txListWidget) {
+    return [
+      Row(
+        mainAxisAlignment: .spaceBetween,
+        children: [
+          Text("Show chart:", style: Theme.of(context).textTheme.titleMedium),
+          Switch.adaptive(
+            value: _showCharts,
+            onChanged: (val) {
+              setState(() {
+                _showCharts = val;
+              });
+            },
+          ),
+        ],
+      ),
+      _showCharts
+          ? SizedBox(
+              height: actualBodyHeight * .7,
+              child: Charts(recentTransactions: _recentTransactions),
+            )
+          : txListWidget,
+    ];
+  }
+
+  List<Widget> _portraitDesign(double actualBodyHeight, Widget txListWidget) {
+    return [
+      SizedBox(
+        height: actualBodyHeight * .3,
+        child: Charts(recentTransactions: _recentTransactions),
+      ),
+      txListWidget,
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final PreferredSizeWidget appBar = Platform.isAndroid
@@ -136,6 +171,7 @@ class _MyHomePageState extends State<_MyHomePage> {
               ],
             ),
           );
+
     final mediaQuery = MediaQuery.of(context);
     final actualBodyHeight =
         mediaQuery.size.height -
@@ -149,6 +185,7 @@ class _MyHomePageState extends State<_MyHomePage> {
         deleteTransaction: _deleteTransaction,
       ),
     );
+
     final appBody = SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -156,38 +193,11 @@ class _MyHomePageState extends State<_MyHomePage> {
           crossAxisAlignment: .stretch,
           children: [
             if (isLandscape)
-              Row(
-                mainAxisAlignment: .spaceBetween,
-                children: [
-                  Text(
-                    "Show chart:",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  Switch.adaptive(
-                    value: _showCharts,
-                    onChanged: (val) {
-                      setState(() {
-                        _showCharts = val;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            if (isLandscape)
-              _showCharts
-                  ? SizedBox(
-                      height: actualBodyHeight * .7,
-                      child: Charts(recentTransactions: _recentTransactions),
-                    )
-                  : txListWidget,
+              ..._landscapeDesign(actualBodyHeight, txListWidget),
 
             //portrait mode
             if (!isLandscape)
-              SizedBox(
-                height: actualBodyHeight * .3,
-                child: Charts(recentTransactions: _recentTransactions),
-              ),
-            if (!isLandscape) txListWidget,
+              ..._portraitDesign(actualBodyHeight, txListWidget),
           ],
         ),
       ),
