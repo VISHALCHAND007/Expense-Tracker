@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:expense_tracker/widgets/charts.dart';
 import 'package:expense_tracker/widgets/transactions_list.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import './models/transaction.dart';
@@ -111,18 +112,30 @@ class _MyHomePageState extends State<_MyHomePage> {
     }).toList();
   }
 
-  late final appBar = AppBar(
-    actions: [
-      IconButton(
-        icon: Icon(Icons.add),
-        onPressed: () => _startAddTransactionsBottomSheet(context),
-      ),
-    ],
-    title: Text("Expense Tracker"),
-  );
-
   @override
   Widget build(BuildContext context) {
+    final PreferredSizeWidget appBar = Platform.isAndroid
+        ? AppBar(
+            actions: [
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () => _startAddTransactionsBottomSheet(context),
+              ),
+            ],
+            title: Text("Expense Tracker"),
+          )
+        : CupertinoNavigationBar(
+            middle: Text("Expense Tracker"),
+            trailing: Row(
+              mainAxisSize: .min,
+              children: [
+                GestureDetector(
+                  child: Icon(CupertinoIcons.add),
+                  onTap: () => _startAddTransactionsBottomSheet(context),
+                ),
+              ],
+            ),
+          );
     final mediaQuery = MediaQuery.of(context);
     final actualBodyHeight =
         mediaQuery.size.height -
@@ -136,9 +149,8 @@ class _MyHomePageState extends State<_MyHomePage> {
         deleteTransaction: _deleteTransaction,
       ),
     );
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
+    final appBody = SafeArea(
+      child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           crossAxisAlignment: .stretch,
@@ -179,13 +191,24 @@ class _MyHomePageState extends State<_MyHomePage> {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Platform.isIOS
-          ? Container()
-          : FloatingActionButton(
-              onPressed: () => _startAddTransactionsBottomSheet(context),
-              child: Icon(Icons.add),
-            ),
     );
+
+    return Platform.isAndroid
+        ? Scaffold(
+            appBar: appBar,
+            body: appBody,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : FloatingActionButton(
+                    onPressed: () => _startAddTransactionsBottomSheet(context),
+                    child: Icon(Icons.add),
+                  ),
+          )
+        : CupertinoPageScaffold(
+            navigationBar: appBar as ObstructingPreferredSizeWidget,
+            child: appBody,
+          );
   }
 }
