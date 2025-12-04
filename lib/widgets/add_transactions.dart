@@ -65,14 +65,14 @@ class _AddTransactionsState extends State<AddTransactions> {
             children: [
               BottomSheetHead(),
               TextField(
-                decoration: InputDecoration(label: Text("Title")),
+                decoration: const InputDecoration(label: Text("Title")),
                 controller: titleController,
                 onSubmitted: (_) => _submitTransaction(),
               ),
               TextField(
-                decoration: InputDecoration(label: Text("Amount")),
+                decoration: const InputDecoration(label: Text("Amount")),
                 controller: amountController,
-                keyboardType: TextInputType.numberWithOptions(),
+                keyboardType: const TextInputType.numberWithOptions(),
                 onSubmitted: (_) => _submitTransaction(),
               ),
               InkWell(
@@ -83,7 +83,7 @@ class _AddTransactionsState extends State<AddTransactions> {
                   child: TextField(
                     readOnly: true,
                     controller: dateController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       label: Text("Select date"),
                       hint: Text("No date chosen!"),
                       icon: Icon(Icons.calendar_month_outlined),
@@ -94,7 +94,10 @@ class _AddTransactionsState extends State<AddTransactions> {
 
               FilledButton(
                 onPressed: _submitTransaction,
-                child: Text("Add Transaction", style: TextStyle(fontSize: 15)),
+                child: const Text(
+                  "Add Transaction",
+                  style: TextStyle(fontSize: 15),
+                ),
               ),
             ],
           ),

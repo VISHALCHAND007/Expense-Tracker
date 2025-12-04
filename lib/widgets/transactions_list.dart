@@ -17,7 +17,7 @@ class TransactionsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // height: 400,
-      padding: EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 10),
       child: transactions.isEmpty
           ? NoTransactions()
           : ListView.builder(
@@ -26,7 +26,7 @@ class TransactionsList extends StatelessWidget {
               itemBuilder: (context, ind) {
                 return Card(
                   elevation: 5,
-                  margin: EdgeInsets.all(5),
+                  margin: const EdgeInsets.all(5),
                   child: ListTile(
                     leading: CircleAvatar(
                       radius: 35,
@@ -51,8 +51,8 @@ class TransactionsList extends StatelessWidget {
                         ? TextButton.icon(
                             onPressed: () =>
                                 deleteTransaction(transactions[ind].id),
-                            label: Text("Delete"),
-                            icon: Icon(Icons.delete),
+                            label: const Text("Delete"),
+                            icon: const Icon(Icons.delete),
                             style: TextButton.styleFrom(
                               foregroundColor: Theme.of(
                                 context,

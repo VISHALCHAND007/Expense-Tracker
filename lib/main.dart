@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:expense_tracker/widgets/charts.dart';
 import 'package:expense_tracker/widgets/transactions_list.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import './models/transaction.dart';
 import './widgets/add_transactions.dart';
@@ -118,19 +118,19 @@ class _MyHomePageState extends State<_MyHomePage> {
         ? AppBar(
             actions: [
               IconButton(
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 onPressed: () => _startAddTransactionsBottomSheet(context),
               ),
             ],
-            title: Text("Expense Tracker"),
+            title: const Text("Expense Tracker"),
           )
         : CupertinoNavigationBar(
-            middle: Text("Expense Tracker"),
+            middle: const Text("Expense Tracker"),
             trailing: Row(
               mainAxisSize: .min,
               children: [
                 GestureDetector(
-                  child: Icon(CupertinoIcons.add),
+                  child: const Icon(CupertinoIcons.add),
                   onTap: () => _startAddTransactionsBottomSheet(context),
                 ),
               ],
@@ -151,7 +151,7 @@ class _MyHomePageState extends State<_MyHomePage> {
     );
     final appBody = SafeArea(
       child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           crossAxisAlignment: .stretch,
           children: [
@@ -203,7 +203,7 @@ class _MyHomePageState extends State<_MyHomePage> {
                 ? Container()
                 : FloatingActionButton(
                     onPressed: () => _startAddTransactionsBottomSheet(context),
-                    child: Icon(Icons.add),
+                    child: const Icon(Icons.add),
                   ),
           )
         : CupertinoPageScaffold(
