@@ -21,16 +21,26 @@ class TransactionsList extends StatelessWidget {
       padding: const EdgeInsets.only(top: 10),
       child: transactions.isEmpty
           ? NoTransactions()
-          : ListView.builder(
-              // reverse: true,
-              itemCount: transactions.length,
-              itemBuilder: (context, ind) {
+          : ListView(
+              children: transactions.map((tx) {
                 return TransactionItem(
-                  transaction: transactions[ind],
+                  key: ValueKey(tx.id),
+                  transaction: tx,
                   deleteTransaction: deleteTransaction,
                 );
-              },
+              }).toList(),
             ),
+      // : ListView.builder(
+      //     // reverse: true,
+      //     itemCount: transactions.length,
+      //     itemBuilder: (context, ind) {
+      //       return TransactionItem(
+      //         key: ValueKey(transactions[ind].id),
+      //         transaction: transactions[ind],
+      //         deleteTransaction: deleteTransaction,
+      //       );
+      //     },
+      //   ),
     );
   }
 }

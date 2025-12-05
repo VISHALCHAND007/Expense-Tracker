@@ -46,7 +46,7 @@ class _MyHomePage extends StatefulWidget {
   State<_MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<_MyHomePage> {
+class _MyHomePageState extends State<_MyHomePage> with WidgetsBindingObserver {
   //temporary data of transactions
   final List<Transaction> _transactions = [
     Transaction(
@@ -145,6 +145,24 @@ class _MyHomePageState extends State<_MyHomePage> {
       ),
       txListWidget,
     ];
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
